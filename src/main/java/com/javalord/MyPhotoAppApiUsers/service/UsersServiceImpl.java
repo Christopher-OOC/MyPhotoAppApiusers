@@ -1,10 +1,10 @@
 package com.javalord.MyPhotoAppApiUsers.service;
 
-import com.example.appdevelopersblog.PhotoAppAPIUsers.data.AlbumsServiceClient;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.data.UserEntity;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.data.UsersRepository;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.model.AlbumResponseModel;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.shared.UserDto;
+import com.javalord.MyPhotoAppApiUsers.data.AlbumsServiceClient;
+import com.javalord.MyPhotoAppApiUsers.data.UserEntity;
+import com.javalord.MyPhotoAppApiUsers.data.UsersRepository;
+import com.javalord.MyPhotoAppApiUsers.model.AlbumResponseModel;
+import com.javalord.MyPhotoAppApiUsers.shared.UserDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.core.userdetails.User;

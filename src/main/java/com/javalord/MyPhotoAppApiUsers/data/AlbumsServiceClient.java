@@ -1,6 +1,6 @@
 package com.javalord.MyPhotoAppApiUsers.data;
 
-import com.example.appdevelopersblog.PhotoAppAPIUsers.model.AlbumResponseModel;
+import com.javalord.MyPhotoAppApiUsers.model.AlbumResponseModel;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;

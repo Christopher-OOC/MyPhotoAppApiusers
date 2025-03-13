@@ -1,9 +1,11 @@
 package com.javalord.MyPhotoAppApiUsers.security;
 
-import com.example.appdevelopersblog.PhotoAppAPIUsers.model.LoginRequestModel;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.service.UsersService;
-import com.example.appdevelopersblog.PhotoAppAPIUsers.shared.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javalord.MyPhotoAppApiUsers.data.UserEntity;
+import com.javalord.MyPhotoAppApiUsers.data.UsersRepository;
+import com.javalord.MyPhotoAppApiUsers.model.LoginRequestModel;
+import com.javalord.MyPhotoAppApiUsers.service.UsersService;
+import com.javalord.MyPhotoAppApiUsers.shared.UserDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.FilterChain;
@@ -28,15 +30,15 @@ import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private UsersService usersService;
+    private UsersRepository usersRepository;
     private Environment environment;
 
-    public AuthenticationFilter(UsersService usersService,
+    public AuthenticationFilter(UsersRepository usersRepository,
                                 Environment environment,
                                 AuthenticationManager authenticationManager) {
 
         super(authenticationManager);
-        this.usersService = usersService;
+        this.usersRepository = usersRepository;
         this.environment = environment;
     }
 
@@ -65,7 +67,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         String username = ((User) authResult.getPrincipal()).getUsername();
-        UserDto userDto = usersService.getUserDetailsByEmail(username);
+        UserEntity userDto = usersRepository.findByEmail(username);
 
         System.out.println("exp" + environment.getProperty("token.expirationTime"));
         System.out.println("sec" + environment.getProperty("token.secret"));

@@ -1,6 +1,7 @@
 package com.javalord.MyPhotoAppApiUsers.security;
 
-import com.example.appdevelopersblog.PhotoAppAPIUsers.service.UsersService;
+import com.javalord.MyPhotoAppApiUsers.data.UsersRepository;
+import com.javalord.MyPhotoAppApiUsers.service.UsersService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -17,24 +18,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurity {
 
-    private UsersService usersService;
+    UsersRepository usersRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private Environment environment;
 
-    public WebSecurity(UsersService usersService,
+    public WebSecurity(
+            UsersRepository usersRepository,
                        Environment environment,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
-
-        this.usersService = usersService;
+                       BCryptPasswordEncoder bCryptPasswordEncoder
+    ) {
         this.environment  = environment;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Bean BCryptPasswordEncoder passwordEncoder() {
+
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
 
         AuthenticationManagerBuilder managerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        managerBuilder.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder);
 
         AuthenticationManager authenticationManager = managerBuilder.build();
 
@@ -48,7 +53,7 @@ public class WebSecurity {
                 .csrf(csrf -> csrf
                         .disable()
                 )
-                .addFilter(new AuthenticationFilter(usersService, environment, authenticationManager))
+                .addFilter(new AuthenticationFilter(usersRepository, environment, authenticationManager))
                 .authenticationManager(authenticationManager)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))

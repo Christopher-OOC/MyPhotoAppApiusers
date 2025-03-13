@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UsersController {
 
     @Autowired
     private UsersService usersService;
@@ -55,7 +55,6 @@ public class UserController {
 
         UserDto userDto = usersService.getUserByUserId(userId);
         UserResponseModel returnValue = new ModelMapper().map(userDto, UserResponseModel.class);
-
 
         return ResponseEntity.status(HttpStatus.OK).body(returnValue);
     }
