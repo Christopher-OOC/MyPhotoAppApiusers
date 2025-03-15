@@ -19,19 +19,18 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurity {
 
     UsersRepository usersRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
     private Environment environment;
 
     public WebSecurity(
             UsersRepository usersRepository,
-                       Environment environment,
-                       BCryptPasswordEncoder bCryptPasswordEncoder
+           Environment environment
     ) {
         this.environment  = environment;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.usersRepository = usersRepository;
     }
 
-    @Bean BCryptPasswordEncoder passwordEncoder() {
+    @Bean
+    BCryptPasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
@@ -40,8 +39,10 @@ public class WebSecurity {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
 
         AuthenticationManagerBuilder managerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-
         AuthenticationManager authenticationManager = managerBuilder.build();
+
+        AuthenticationFilter authFilter = new AuthenticationFilter(usersRepository, environment, authenticationManager);
+        authFilter.setFilterProcessesUrl("/users/login");
 
         return http.authorizeHttpRequests( requests -> requests
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
@@ -53,7 +54,7 @@ public class WebSecurity {
                 .csrf(csrf -> csrf
                         .disable()
                 )
-                .addFilter(new AuthenticationFilter(usersRepository, environment, authenticationManager))
+                .addFilter(authFilter)
                 .authenticationManager(authenticationManager)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))

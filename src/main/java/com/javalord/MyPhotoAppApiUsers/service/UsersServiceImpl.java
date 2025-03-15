@@ -1,6 +1,6 @@
 package com.javalord.MyPhotoAppApiUsers.service;
 
-import com.javalord.MyPhotoAppApiUsers.data.AlbumsServiceClient;
+//import com.javalord.MyPhotoAppApiUsers.data.AlbumsServiceClient;
 import com.javalord.MyPhotoAppApiUsers.data.UserEntity;
 import com.javalord.MyPhotoAppApiUsers.data.UsersRepository;
 import com.javalord.MyPhotoAppApiUsers.model.AlbumResponseModel;
@@ -24,18 +24,18 @@ public class UsersServiceImpl implements UsersService {
     private UsersRepository usersRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private RestTemplate restTemplate;
-    private AlbumsServiceClient albumsServiceClient;
+    //private AlbumsServiceClient albumsServiceClient;
 
     public UsersServiceImpl(
             UsersRepository usersRepository,
             BCryptPasswordEncoder bCryptPasswordEncoder,
-            RestTemplate restTemplate,
-            AlbumsServiceClient albumsServiceClient
+            RestTemplate restTemplate
+           // AlbumsServiceClient albumsServiceClient
     ) {
         this.usersRepository = usersRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.restTemplate = restTemplate;
-        this.albumsServiceClient = albumsServiceClient;
+        //this.albumsServiceClient = albumsServiceClient;
     }
 
 
@@ -82,10 +82,10 @@ public class UsersServiceImpl implements UsersService {
 //        });
 //        List<AlbumResponseModel> albumsList = albumsListResponse.getBody();
 
-        List<AlbumResponseModel> albumsList = albumsServiceClient.getAlbums(userId);
+        //List<AlbumResponseModel> albumsList = albumsServiceClient.getAlbums(userId);
 
         UserDto userDto = new ModelMapper().map(user, UserDto.class);
-        userDto.setAlbums(albumsList);
+       // userDto.setAlbums(albumsList);
 
         return userDto;
     }
